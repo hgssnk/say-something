@@ -32,11 +32,11 @@ jobs:
       - name: Generate index.html
         run: python src/generate_index.py
 
-      - name: Configure GitHub Pages
-        uses: actions/configure-pages@v5 # v3 -> v5
-
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3 # v1 -> v3
+        uses: actions/upload-pages-artifact@v3
+        with:
+          # index.html と voices フォルダが含まれるディレクトリを指定
+          path: 'public'
 
       - name: Deploy to GitHub Pages
-        uses: actions/deploy-pages@v4 # v1 -> v4
+        uses: actions/deploy-pages@v4
