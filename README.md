@@ -4,13 +4,13 @@
 ## ./github/workflows/run.yml
 ```mermaid
 sequenceDiagram
-    participant User as ユーザー
+    participant User as Cron
     participant Actions as GitHub Actions (run.yml)
     participant Main as main.py
     participant Gemini as Gemini API
     participant OpenAI as OpenAI TTS API
 
-    User->>Actions: 手動実行
+    User->>Actions: スケジュール実行
     Actions->>Main: python main.py
     Main->>Main: テーマ選択・テキスト生成
     Main->>Gemini: ask_gemini(prompt)
@@ -23,7 +23,7 @@ sequenceDiagram
 ## ./github/workflows/pages.yml
 ```mermaid
 sequenceDiagram
-    participant User as ユーザー
+    participant User as Cron
     participant Repo as GitHub リポジトリ
     participant Runner as Actions 実行環境 (Ubuntu)
     participant Pages as GitHub Pages サーバー
