@@ -21,18 +21,17 @@ sequenceDiagram
 ```mermaid
 sequenceDiagram
     participant User as ユーザー
-    participant GitHubActions as Actions
-    participant Repo as リポジトリ
-    participant GenerateIndex as generate_index.py
-    participant Pages as GitHub Pages
+    participant Repo as GitHub リポジトリ
+    participant Runner as Actions 実行環境 (Ubuntu)
+    participant Pages as GitHub Pages サーバー
 
-    User->>Actions: mainブランチにpublic更新
-    Actions->>Repo: リポジトリをチェックアウト
-    Repo->>GenerateIndex: index.html生成スクリプト実行
-    GenerateIndex-->>Repo: index.html更新
-    Repo->>Actions: GitHub Pages設定
-    Actions->>Pages: アーティファクトをアップロード
-    Pages-->>Pages: GitHub Pagesへデプロイ
-    Pages-->>User: 更新されたページを公開
-
+    User->>Repo: public/voices/ 内にプッシュ
+    Note over Repo: ワークフローが起動
+    Repo->>Runner: コードとPython環境をセットアップ
+    Runner->>Runner: src/generate_index.py を実行
+    Note right of Runner: public/ 内に index.html や<br/>月別HTMLを生成 (一時的)
+    Runner->>Runner: 生成物をアーカイブ化 (Artifact)
+    Runner->>Pages: アーカイブをアップロード
+    Pages->>Pages: デプロイ実行
+    Pages-->>User: 公開URLで閲覧可能
 ```
