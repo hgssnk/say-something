@@ -11,14 +11,19 @@ from openai import OpenAI
 # Paths
 # =========================
 
-BASE_DIR = Path(__file__).resolve().parent          # src/
-ROOT_DIR = BASE_DIR.parent                          # repo root
+BASE_DIR = Path(__file__).resolve().parent      # src/
+ROOT_DIR = BASE_DIR.parent
 
+# マスターデータ
 TEXT_DIR = BASE_DIR / "texts"
-LOG_DIR = BASE_DIR / "log"
-VOICE_DIR = ROOT_DIR / "public" / "voices"         # public/voices/
 
-LOG_DIR.mkdir(exist_ok=True)
+# トランザクションデータ
+DATA_DIR = ROOT_DIR / "data"
+LOG_DIR = DATA_DIR / "log"
+VOICE_DIR = ROOT_DIR / "public" / "voices"
+
+# ディレクトリ作成
+LOG_DIR.mkdir(parents=True, exist_ok=True)
 VOICE_DIR.mkdir(parents=True, exist_ok=True)
 
 
