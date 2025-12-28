@@ -1,3 +1,6 @@
+## 生成物
+[https://hgssnk.github.io/say-something/index.html](https://hgssnk.github.io/say-something/index.html)
+
 ## ./github/workflows/run.yml
 ```mermaid
 sequenceDiagram
