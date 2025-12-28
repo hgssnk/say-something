@@ -23,7 +23,7 @@ sequenceDiagram
 ## ./github/workflows/pages.yml
 ```mermaid
 sequenceDiagram
-    participant User as GitHub ユーザー
+    participant User as ユーザー
     participant Repo as GitHub リポジトリ
     participant Runner as GitHub Actions (pages.yml)
     participant Pages as GitHub Pages サーバー
