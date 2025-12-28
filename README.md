@@ -23,9 +23,9 @@ sequenceDiagram
 ## ./github/workflows/pages.yml
 ```mermaid
 sequenceDiagram
-    participant User as GitHub Actions
+    participant User as GitHub ユーザー
     participant Repo as GitHub リポジトリ
-    participant Runner as Actions 実行環境 (Ubuntu)
+    participant Runner as GitHub Actions (pages.yml)
     participant Pages as GitHub Pages サーバー
 
     User->>Repo: public/voices/ 内にプッシュ
