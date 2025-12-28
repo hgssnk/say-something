@@ -1,12 +1,12 @@
 name: Update Index and Deploy Pages
 
 on:
-  workflow_dispatch:
   push:
     branches:
       - main
     paths:
-      - 'public/voices/**'
+      - 'public/voices/**'  # voices の変更のみをトリガー
+  workflow_dispatch:  # 手動実行のトリガーを追加
 
 jobs:
   update_pages:
