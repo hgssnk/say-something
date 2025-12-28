@@ -27,14 +27,11 @@ jobs:
       - name: Generate index.html
         run: python src/generate_index.py
 
-      - name: Deploy to GitHub Pages
+      - name: Configure GitHub Pages
         uses: actions/configure-pages@v3
 
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v1
-        with:
-          path: public
+        uses: actions/upload-pages-artifact@v2  # 更新されたバージョンを使用
 
-      - name: Deploy Pages
+      - name: Deploy to GitHub Pages
         uses: actions/deploy-pages@v1
-
