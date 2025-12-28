@@ -9,7 +9,9 @@ PUBLIC_DIR = BASE_DIR / "public"
 VOICES_DIR = PUBLIC_DIR / "voices"
 
 # ここにリポジトリのURLを設定してください
-REPO_URL = "https://github.com/あなたのユーザー名/リポジトリ名"
+server_url = os.environ.get("GITHUB_SERVER_URL", None)
+repo_path = os.environ.get("GITHUB_REPOSITORY", None)
+REPO_URL = f"{server_url}/{repo_path}"
 
 # ==========================================
 # HTML Templates
