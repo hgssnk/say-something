@@ -73,7 +73,6 @@ def ask_gemini(prompt: str) -> str:
     
     raise RuntimeError("Gemini API Rate Limit exceeded after retries.")
 
-# ... (pick_theme, get_text, generate_voice はそのまま) ...
 
 # =========================
 # Main
@@ -121,86 +120,6 @@ def main() -> None:
     final_path = VOICE_DIR / f"{timestamp}_{title}.mp3"
     mp3_path.rename(final_path)
     print(f"generated: {final_path}")
-
-if __name__ == "__main__":
-    main()
-
-
-
-# =========================
-# Helpers
-# =========================
-def pick_theme() -> str:
-    # 現在のテーマを読み込み
-    lines = THEMES_FILE.read_text(encoding="utf-8").splitlines(keepends=True)
-    if not lines:
-        raise RuntimeError("No themes left in themes.txt")
-
-    theme_line = random.choice(lines)
-    theme = theme_line.strip()
-
-    # 1. themes.txt から削除して更新
-    lines.remove(theme_line)
-    THEMES_FILE.write_text("".join(lines), encoding="utf-8")
-
-    # 2. archive_themes.txt に追記（ここを追加）
-    with ARCHIVE_THEMES_FILE.open("a", encoding="utf-8") as f:
-        timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        f.write(f"[{timestamp}] {theme}\n")
-
-    return theme
-
-def get_text(path: Path) -> str:
-    return path.read_text(encoding="utf-8").strip()
-
-def ask_gemini(prompt: str) -> str:
-    if not GEMINI_API_KEY:
-        raise RuntimeError("GEMINI_API_KEY is not set")
-    payload = {"contents": [{"parts": [{"text": prompt}]}]}
-    r = requests.post(GEMINI_ENDPOINT, params={"key": GEMINI_API_KEY}, json=payload, timeout=60)
-    r.raise_for_status()
-    return r.json()["candidates"][0]["content"]["parts"][0]["text"]
-
-def generate_voice(text: str, out_path: Path, voice: str) -> None:
-    if not OPENAI_API_KEY:
-        raise RuntimeError("OPENAI_API_KEY is not set")
-    client = OpenAI(api_key=OPENAI_API_KEY)
-    with client.audio.speech.with_streaming_response.create(
-        model="tts-1-hd", voice=voice, input=text
-    ) as response:
-        response.stream_to_file(out_path)
-
-# =========================
-# Main
-# =========================
-def main() -> None:
-    timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M_%S")
-    theme = pick_theme()
-    character = random.choice(list(CHARACTER_FILES.keys()))
-    prompt = get_text(CHARACTER_FILES[character]) + theme
-
-    # LLM
-    answer = ask_gemini(prompt).replace(" ", "").replace("\n", "")
-    print(answer)
-
-    # Log
-    log_file = LOG_DIR / f"{timestamp}.log"
-    log_file.write_text(answer, encoding="utf-8")
-
-    # Voice
-    mp3_path = VOICE_DIR / f"{timestamp}.mp3"
-    generate_voice(answer, mp3_path, VOICE_MAP[character])
-
-    # Short poetic title
-    title_prompt = "次の内容を一言で(10字以内)かつ詩的に表してください。" + answer
-    title = ask_gemini(title_prompt).replace(" ", "").replace("\n", "")
-    final_path = VOICE_DIR / f"{timestamp}_{title}.mp3"
-    mp3_path.rename(final_path)
-    print(f"generated: {final_path}")
-
-    # LINEは将来対応
-    # post_line_message(...)
-    # post_line_voice(...)
 
 if __name__ == "__main__":
     main()
