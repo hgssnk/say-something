@@ -1,6 +1,9 @@
 name: generate-voice
 
 on:
+  schedule:
+    # 1日2回定期実行 (JST 09:00, 21:00 -> UTC 00:00, 12:00)
+    - cron: '45 8,21 * * *'
   workflow_dispatch:
 
 permissions:
