@@ -13,6 +13,7 @@ TEXT_DIR = BASE_DIR / "texts"
 PUBLIC_DIR = BASE_DIR.parent / "public"
 VOICE_DIR = PUBLIC_DIR / "voices"
 LOG_DIR = PUBLIC_DIR / "log"
+ARCHIVE_THEMES_FILE = PUBLIC_DIR / "archive_themes.txt"
 
 VOICE_DIR.mkdir(parents=True, exist_ok=True)
 LOG_DIR.mkdir(parents=True, exist_ok=True)
@@ -49,11 +50,24 @@ GEMINI_ENDPOINT = (
 # Helpers
 # =========================
 def pick_theme() -> str:
+    # 現在のテーマを読み込み
     lines = THEMES_FILE.read_text(encoding="utf-8").splitlines(keepends=True)
-    theme = random.choice(lines)
-    lines.remove(theme)
+    if not lines:
+        raise RuntimeError("No themes left in themes.txt")
+
+    theme_line = random.choice(lines)
+    theme = theme_line.strip()
+
+    # 1. themes.txt から削除して更新
+    lines.remove(theme_line)
     THEMES_FILE.write_text("".join(lines), encoding="utf-8")
-    return theme.strip()
+
+    # 2. archive_themes.txt に追記（ここを追加）
+    with ARCHIVE_THEMES_FILE.open("a", encoding="utf-8") as f:
+        timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        f.write(f"[{timestamp}] {theme}\n")
+
+    return theme
 
 def get_text(path: Path) -> str:
     return path.read_text(encoding="utf-8").strip()
